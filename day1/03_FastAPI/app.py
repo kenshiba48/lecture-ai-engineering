@@ -49,7 +49,7 @@ class SimpleGenerationRequest(BaseModel):
     prompt: str
     max_new_tokens: Optional[int] = 512
     do_sample: Optional[bool] = True
-    temperature: Optional[float] = 0.7
+    temperature: Optional[float] = 0.5
     top_p: Optional[float] = 0.9
 
 class GenerationResponse(BaseModel):
@@ -96,7 +96,7 @@ def extract_assistant_response(outputs, user_prompt):
                         assistant_response = last_message.get("content", "").strip()
                     else:
                         # 予期しないリスト形式の場合は最後の要素を文字列として試行
-                        print(f"警告: 最後のメッセージの形式が予期しないリスト形式です: {last_message}")
+                        print(f" 最後のメッセージの形式が予期しないリスト形式です: {last_message}")
                         assistant_response = str(last_message).strip()
 
             elif isinstance(generated_output, str):
@@ -223,7 +223,6 @@ def run_with_ngrok(port=8501):
     if not ngrok_token:
         print("Ngrok認証トークンが'NGROK_TOKEN'環境変数に設定されていません。")
         try:
-            print("Colab Secrets(左側の鍵アイコン)で'NGROK_TOKEN'を設定することをお勧めします。")
             ngrok_token = input("Ngrok認証トークンを入力してください (https://dashboard.ngrok.com/get-started/your-authtoken): ")
         except EOFError:
             print("\nエラー: 対話型入力が利用できません。")
